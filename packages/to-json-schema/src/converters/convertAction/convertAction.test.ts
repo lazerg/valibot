@@ -484,6 +484,17 @@ describe('convertAction', () => {
     );
   });
 
+  test('should ignore error for gt value action with invalid type', () => {
+    expect(
+      convertAction({}, v.gtValue<v.ValueInput, 3>(3), { errorMode: 'ignore' })
+    ).toStrictEqual({});
+    expect(
+      convertAction({ type: 'string' }, v.gtValue<v.ValueInput, 'm'>('m'), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({ type: 'string' });
+  });
+
   test('should throw error for gt value action with openapi-3.0', () => {
     const error = 'The "gt_value" action is not supported for OpenAPI 3.0.';
     expect(() =>
@@ -748,6 +759,19 @@ describe('convertAction', () => {
     );
   });
 
+  test('should ignore error for lt value action with invalid type', () => {
+    expect(
+      convertAction({}, v.ltValue<v.ValueInput, 10>(10), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({});
+    expect(
+      convertAction({ type: 'string' }, v.ltValue<v.ValueInput, 'm'>('m'), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({ type: 'string' });
+  });
+
   test('should throw error for lt value action with openapi-3.0', () => {
     const error = 'The "lt_value" action is not supported for OpenAPI 3.0.';
     expect(() =>
@@ -890,6 +914,19 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "max_value" action is not supported on type "string".'
     );
+  });
+
+  test('should ignore error for max value action with invalid type', () => {
+    expect(
+      convertAction({}, v.maxValue<v.ValueInput, 3>(3), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({});
+    expect(
+      convertAction({ type: 'string' }, v.maxValue<v.ValueInput, 'm'>('m'), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({ type: 'string' });
   });
 
   test('should convert metadata action', () => {
@@ -1070,6 +1107,19 @@ describe('convertAction', () => {
     expect(console.warn).toHaveBeenLastCalledWith(
       'The "min_value" action is not supported on type "string".'
     );
+  });
+
+  test('should ignore error for min value action with invalid type', () => {
+    expect(
+      convertAction({}, v.minValue<v.ValueInput, 3>(3), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({});
+    expect(
+      convertAction({ type: 'string' }, v.minValue<v.ValueInput, 'm'>('m'), {
+        errorMode: 'ignore',
+      })
+    ).toStrictEqual({ type: 'string' });
   });
 
   test('should convert multiple of action', () => {
