@@ -1,11 +1,23 @@
 import type { BaseTransformation } from '../../types/index.ts';
-import type { ArrayInput, ArrayRequirement } from '../types.ts';
+import type { ArrayInput } from '../types.ts';
+
+/**
+ * Array requirement type.
+ */
+type ArrayRequirement<
+  TInput extends ArrayInput,
+  TOuput extends TInput[number],
+> =
+  | ((item: TInput[number], index: number, array: TInput) => item is TOuput)
+  | ((item: TInput[number], index: number, array: TInput) => boolean);
 
 /**
  * Filter items action interface.
  */
-export interface FilterItemsAction<TInput extends ArrayInput>
-  extends BaseTransformation<TInput, TInput, never> {
+export interface FilterItemsAction<
+  TInput extends ArrayInput,
+  TOuput extends TInput[number],
+> extends BaseTransformation<TInput, TOuput[], never> {
   /**
    * The action type.
    */
@@ -17,7 +29,7 @@ export interface FilterItemsAction<TInput extends ArrayInput>
   /**
    * The filter items operation.
    */
-  readonly operation: ArrayRequirement<TInput>;
+  readonly operation: ArrayRequirement<TInput, TOuput>;
 }
 
 /**
@@ -27,14 +39,17 @@ export interface FilterItemsAction<TInput extends ArrayInput>
  *
  * @returns A filter items action.
  */
-export function filterItems<TInput extends ArrayInput>(
-  operation: ArrayRequirement<TInput>
-): FilterItemsAction<TInput>;
+export function filterItems<
+  TInput extends ArrayInput,
+  TOuput extends TInput[number],
+>(
+  operation: ArrayRequirement<TInput, TOuput>
+): FilterItemsAction<TInput, TOuput>;
 
 // @__NO_SIDE_EFFECTS__
 export function filterItems(
-  operation: ArrayRequirement<unknown[]>
-): FilterItemsAction<unknown[]> {
+  operation: ArrayRequirement<unknown[], unknown>
+): FilterItemsAction<unknown[], unknown> {
   return {
     kind: 'transformation',
     type: 'filter_items',
