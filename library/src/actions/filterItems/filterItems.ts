@@ -16,7 +16,7 @@ type ArrayRequirement<
  */
 export interface FilterItemsAction<
   TInput extends ArrayInput,
-  TOuput extends TInput[number],
+  TOuput extends TInput[number] = TInput[number],
 > extends BaseTransformation<TInput, TOuput[], never> {
   /**
    * The action type.
@@ -41,7 +41,7 @@ export interface FilterItemsAction<
  */
 export function filterItems<
   TInput extends ArrayInput,
-  TOuput extends TInput[number],
+  TOuput extends TInput[number] = TInput[number],
 >(
   operation: ArrayRequirement<TInput, TOuput>
 ): FilterItemsAction<TInput, TOuput>;

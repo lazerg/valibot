@@ -9,15 +9,79 @@ export const properties: Record<string, PropertyProps> = {
       href: '../ArrayInput/',
     },
   },
-  operation: {
+  TOuput: {
+    modifier: 'extends',
     type: {
       type: 'custom',
-      name: 'ArrayRequirement',
-      href: '../ArrayRequirement/',
-      generics: [
+      name: 'TInput',
+      indexes: ['number'],
+    },
+    default: {
+      type: 'custom',
+      name: 'TInput',
+      indexes: ['number'],
+    },
+  },
+  operation: {
+    type: {
+      type: 'union',
+      options: [
         {
-          type: 'custom',
-          name: 'TInput',
+          type: 'function',
+          params: [
+            {
+              name: 'item',
+              type: {
+                type: 'custom',
+                name: 'TInput',
+                indexes: ['number'],
+              },
+            },
+            {
+              name: 'index',
+              type: 'number',
+            },
+            {
+              name: 'array',
+              type: {
+                type: 'custom',
+                name: 'TInput',
+              },
+            },
+          ],
+          return: {
+            type: 'predicate',
+            param: 'item',
+            is: {
+              type: 'custom',
+              name: 'TOuput',
+            },
+          },
+        },
+        {
+          type: 'function',
+          params: [
+            {
+              name: 'item',
+              type: {
+                type: 'custom',
+                name: 'TInput',
+                indexes: ['number'],
+              },
+            },
+            {
+              name: 'index',
+              type: 'number',
+            },
+            {
+              name: 'array',
+              type: {
+                type: 'custom',
+                name: 'TInput',
+              },
+            },
+          ],
+          return: 'boolean',
         },
       ],
     },
@@ -31,6 +95,10 @@ export const properties: Record<string, PropertyProps> = {
         {
           type: 'custom',
           name: 'TInput',
+        },
+        {
+          type: 'custom',
+          name: 'TOuput',
         },
       ],
     },

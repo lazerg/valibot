@@ -12,13 +12,21 @@ describe('filterItems', () => {
   type Action1 = FilterItemsAction<Input, Animal>;
   type Action2 = FilterItemsAction<Input, Dog>;
 
-  test('should return action object', () => {
-    expectTypeOf(
-      filterItems<Input, Animal>((item): boolean => item.type === 'dog')
-    ).toEqualTypeOf<Action1>();
-    expectTypeOf(
-      filterItems<Input, Dog>((item): item is Dog => item.type === 'dog')
-    ).toEqualTypeOf<Action2>();
+  describe('should return action object', () => {
+    test('with one type argument', () => {
+      expectTypeOf(
+        filterItems<Input>((item): boolean => item.type === 'dog')
+      ).toEqualTypeOf<Action1>();
+    });
+
+    test('with two type arguments', () => {
+      expectTypeOf(
+        filterItems<Input, Animal>((item): boolean => item.type === 'dog')
+      ).toEqualTypeOf<Action1>();
+      expectTypeOf(
+        filterItems<Input, Dog>((item): item is Dog => item.type === 'dog')
+      ).toEqualTypeOf<Action2>();
+    });
   });
 
   describe('should infer correct types', () => {
