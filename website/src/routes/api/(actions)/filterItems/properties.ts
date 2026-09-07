@@ -16,11 +16,6 @@ export const properties: Record<string, PropertyProps> = {
       name: 'TInput',
       indexes: ['number'],
     },
-    default: {
-      type: 'custom',
-      name: 'TInput',
-      indexes: ['number'],
-    },
   },
   operation: {
     type: {
