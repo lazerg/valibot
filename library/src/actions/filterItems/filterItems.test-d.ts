@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 import { describe, expectTypeOf, test } from 'vitest';
+import { pipe } from '../../methods/index.ts';
+import { array, number, string, union } from '../../schemas/index.ts';
 import type { InferInput, InferIssue, InferOutput } from '../../types/index.ts';
 import { filterItems, type FilterItemsAction } from './filterItems.ts';
 
@@ -17,15 +19,48 @@ describe('filterItems', () => {
       expectTypeOf(
         filterItems<Input>((item): boolean => item.type === 'dog')
       ).toEqualTypeOf<Action1>();
+      expectTypeOf(
+        filterItems<Input>((item): item is Dog => item.type === 'dog')
+      ).toEqualTypeOf<Action1>();
     });
 
     test('with two type arguments', () => {
       expectTypeOf(
-        filterItems<Input, Animal>((item): boolean => item.type === 'dog')
-      ).toEqualTypeOf<Action1>();
-      expectTypeOf(
         filterItems<Input, Dog>((item): item is Dog => item.type === 'dog')
       ).toEqualTypeOf<Action2>();
+      // @ts-expect-error A boolean operation cannot narrow the output
+      filterItems<Input, Dog>((item): boolean => item.type === 'dog');
+    });
+  });
+
+  describe('should narrow output of pipeline', () => {
+    test('with explicit type predicate', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const schema = pipe(
+        array(union([string(), number()])),
+        filterItems((item): item is string => typeof item === 'string')
+      );
+      expectTypeOf<InferOutput<typeof schema>>().toEqualTypeOf<string[]>();
+    });
+
+    test('with inferred type predicate', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const schema = pipe(
+        array(union([string(), number()])),
+        filterItems((item) => typeof item === 'string')
+      );
+      expectTypeOf<InferOutput<typeof schema>>().toEqualTypeOf<string[]>();
+    });
+
+    test('with boolean operation', () => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const schema = pipe(
+        array(union([string(), number()])),
+        filterItems((item): boolean => typeof item === 'string')
+      );
+      expectTypeOf<InferOutput<typeof schema>>().toEqualTypeOf<
+        (string | number)[]
+      >();
     });
   });
 

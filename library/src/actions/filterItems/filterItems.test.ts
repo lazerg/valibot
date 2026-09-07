@@ -3,11 +3,11 @@ import { filterItems, type FilterItemsAction } from './filterItems.ts';
 
 describe('filterItems', () => {
   const operation = (item: number) => item > 9;
-  const action = filterItems<number[], number>(operation);
+  const action = filterItems<number[]>(operation);
 
   describe('should return action object', () => {
     test('with one type argument', () => {
-      expect(filterItems<number[]>(operation)).toStrictEqual({
+      expect(action).toStrictEqual({
         kind: 'transformation',
         type: 'filter_items',
         reference: filterItems,
@@ -18,14 +18,18 @@ describe('filterItems', () => {
     });
 
     test('with two type arguments', () => {
-      expect(action).toStrictEqual({
-        kind: 'transformation',
-        type: 'filter_items',
-        reference: filterItems,
-        async: false,
-        operation,
-        '~run': expect.any(Function),
-      } satisfies FilterItemsAction<number[], number>);
+      const predicate = (item: number | string): item is number =>
+        typeof item === 'number';
+      expect(filterItems<(number | string)[], number>(predicate)).toStrictEqual(
+        {
+          kind: 'transformation',
+          type: 'filter_items',
+          reference: filterItems,
+          async: false,
+          operation: predicate,
+          '~run': expect.any(Function),
+        } satisfies FilterItemsAction<(number | string)[], number>
+      );
     });
   });
 

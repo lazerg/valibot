@@ -6,9 +6,9 @@ import type { ArrayInput } from '../types.ts';
  */
 type ArrayRequirement<
   TInput extends ArrayInput,
-  TOuput extends TInput[number],
+  TOutput extends TInput[number],
 > =
-  | ((item: TInput[number], index: number, array: TInput) => item is TOuput)
+  | ((item: TInput[number], index: number, array: TInput) => item is TOutput)
   | ((item: TInput[number], index: number, array: TInput) => boolean);
 
 /**
@@ -16,8 +16,8 @@ type ArrayRequirement<
  */
 export interface FilterItemsAction<
   TInput extends ArrayInput,
-  TOuput extends TInput[number] = TInput[number],
-> extends BaseTransformation<TInput, TOuput[], never> {
+  TOutput extends TInput[number] = TInput[number],
+> extends BaseTransformation<TInput, TOutput[], never> {
   /**
    * The action type.
    */
@@ -29,7 +29,7 @@ export interface FilterItemsAction<
   /**
    * The filter items operation.
    */
-  readonly operation: ArrayRequirement<TInput, TOuput>;
+  readonly operation: ArrayRequirement<TInput, TOutput>;
 }
 
 /**
@@ -41,10 +41,25 @@ export interface FilterItemsAction<
  */
 export function filterItems<
   TInput extends ArrayInput,
-  TOuput extends TInput[number] = TInput[number],
+  TOutput extends TInput[number],
 >(
-  operation: ArrayRequirement<TInput, TOuput>
-): FilterItemsAction<TInput, TOuput>;
+  operation: (
+    item: TInput[number],
+    index: number,
+    array: TInput
+  ) => item is TOutput
+): FilterItemsAction<TInput, TOutput>;
+
+/**
+ * Creates a filter items transformation action.
+ *
+ * @param operation The filter items operation.
+ *
+ * @returns A filter items action.
+ */
+export function filterItems<TInput extends ArrayInput>(
+  operation: (item: TInput[number], index: number, array: TInput) => boolean
+): FilterItemsAction<TInput>;
 
 // @__NO_SIDE_EFFECTS__
 export function filterItems(

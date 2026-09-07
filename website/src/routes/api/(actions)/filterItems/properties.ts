@@ -9,7 +9,7 @@ export const properties: Record<string, PropertyProps> = {
       href: '../ArrayInput/',
     },
   },
-  TOuput: {
+  TOutput: {
     modifier: 'extends',
     type: {
       type: 'custom',
@@ -54,7 +54,7 @@ export const properties: Record<string, PropertyProps> = {
             param: 'item',
             is: {
               type: 'custom',
-              name: 'TOuput',
+              name: 'TOutput',
             },
           },
         },
@@ -98,7 +98,7 @@ export const properties: Record<string, PropertyProps> = {
         },
         {
           type: 'custom',
-          name: 'TOuput',
+          name: 'TOutput',
         },
       ],
     },
